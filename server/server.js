@@ -20,9 +20,9 @@ loadModel().then((m) => {
     model = m;
   });
 
-function argMax(array) {
-    return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-}
+// function argMax(array) {
+//     return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+// }
 
 async function getData(req) {
     try {
@@ -43,9 +43,9 @@ async function getData(req) {
             const row = [];
             for (let x = 0; x < width; x++) {
               const index = (y * width + x) * 4;
-              const red = pixelData[index];
-              const green = pixelData[index + 1];
-              const blue = pixelData[index + 2];
+              const red = pixelData[index] / 255;
+              const green = pixelData[index + 1] / 255;
+              const blue = pixelData[index + 2] / 255;
             //   const alpha = pixelData[index + 3];
             //   const grayScale = (red + green + blue) / 3;
             //   row.push(grayScale);
@@ -54,20 +54,27 @@ async function getData(req) {
             }
             pixelArray.push(row);
           }
+        console.log(pixelArray)
 
         
         // add a dimension in the 0 index for model
         let tensor = tf.tensor3d(pixelArray).expandDims(0);
-        tensor = tf.image.resizeBilinear(tensor, [256, 256]);
-        console.log(tensor)
-        console.log(hemorrhages[6])
+        // tensor = tf.image.resizeBilinear(tensor, [256, 256]);
+        // console.log(tensor)
+        // console.log(hemorrhages[6])
+
+       
 
         const pred = await model.predict(tensor);
-        console.log(pred)
+      
         await pred.data().then(data => {
-            console.log(data)
-            console.log(Array.from(data))
-            result = argMax(Array.from(data))
+            const imageData = [];
+            // console.log(data)
+            for (let i = 0; i < data.length; i++) {
+                imageData[i] = (data[i] > 0.2105) ? 1 : 0;
+            }
+            result = imageData;          
+            // console.log(data)
             }
         )
     } catch (error) {
@@ -83,8 +90,8 @@ app.post('/upload-image', async (req, res) => {
             const returnValue = getData(req);
             resolve(returnValue);
         });
-        console.log(hemorrhages[result])
-        res.status(200).send(hemorrhages[result])
+        console.log(typeof result)
+        res.status(200).send(result)
     } catch(error) {
         console.log(error)
         res.status(500).send('Internal Server Error');

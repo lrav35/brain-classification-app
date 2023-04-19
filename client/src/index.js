@@ -15,9 +15,11 @@ function Title(props) {
   );
 }
 
+
+
 root.render(
   <React.StrictMode>
-    <Title title="Hemorrhage Classifier" subtitle="Insert an image of a brain below to see if our model can detect hemorrhaging and of what type." />
+    <Title title="Hemorrhage Segmentation" subtitle="Insert an image of a brain below to see if our model can detect hemorrhaging." />
     <App />
   </React.StrictMode>
 );
