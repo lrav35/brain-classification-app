@@ -15,14 +15,13 @@ function Title(props) {
   );
 }
 
+
+
 root.render(
   <React.StrictMode>
-    <Title title="Hemorrhage Classifier" subtitle="Insert an image of a brain below to see if our model can detect hemorrhaging and of what type." />
+    <Title title="Hemorrhage Segmentation" subtitle="Insert an image of a brain below to see if our model can detect hemorrhaging." />
     <App />
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
